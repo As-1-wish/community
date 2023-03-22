@@ -1,0 +1,58 @@
+package com.lesson.community.entity;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+
+@Entity
+@Table(name="message")
+public class MessageEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "int(11) NOT NULL")
+    private int id;
+
+    @Column(name = "from_id", columnDefinition = "int(11) DEFAULT NULL")
+    private int fromId;
+
+    @Column(name = "to_id", columnDefinition = "varchar(45) DEFAULT NULL")
+    private int toId;
+
+    @Column(name = "conversation_id", columnDefinition = "varchar(45) NOT NULL comment '0-有效;1-无效'")
+    private String conversationId;
+
+    @Column(name = "content", columnDefinition = "text")
+    private String content;
+
+    @Column(name = "status", columnDefinition = "int(11) DEFAULT '0' comment '0-未读;1-已读;2-删除'")
+    private int status;
+
+    @Column(name = "createTime", columnDefinition = "timestamp NULL DEFAULT NULL")
+    private Timestamp createTime;
+
+
+    public MessageEntity(){}
+
+    public MessageEntity(int fromId, int toId, String conversationId,String content,int status,
+                         Timestamp createTime){
+        this.fromId  = fromId;
+        this.toId = toId;
+        this.conversationId = conversationId;
+        this.content = content;
+        this.status= status;
+        this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageEntity{" +
+                "id=" + id +
+                ", fromId=" + fromId +
+                ", toId=" + toId +
+                ", conversationId='" + conversationId + '\'' +
+                ", content='" + content + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                '}';
+    }
+}
