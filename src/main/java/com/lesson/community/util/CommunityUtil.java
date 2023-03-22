@@ -21,7 +21,7 @@ public class CommunityUtil {
 
     // MD5加密
     public static String Encrypt(String key){
-        if(StringUtils.isEmpty(key))
+        if(StringUtils.isBlank(key))
             return null;
         return DigestUtils.md5DigestAsHex(key.getBytes())   ;
     }

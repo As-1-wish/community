@@ -36,10 +36,10 @@ public class UserEntity {
     @Column(name = "email", columnDefinition = "varchar(100) DEFAULT NULL comment '邮箱'")
     private String email;
 
-    @Column(name = "type", columnDefinition = "int(11) DEFAULT NULL comment '0-普通用户;1-管理员;2-版主'")
+    @Column(name = "type", columnDefinition = "int(11) DEFAULT 0 comment '0-普通用户;1-管理员;2-版主'")
     private int type;
 
-    @Column(name = "status", columnDefinition = "int(11) DEFAULT NULL comment '0-未激活;1-已激活'")
+    @Column(name = "status", columnDefinition = "int(11) DEFAULT 0 comment '0-未激活;1-已激活'")
     private int status;
 
     @Column(name = "activation_code", columnDefinition = "varchar(100) DEFAULT NULL")

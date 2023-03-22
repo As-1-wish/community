@@ -3,6 +3,7 @@ package com.lesson.community.service;
 import com.lesson.community.entity.UserEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
     public List<UserEntity> findAll();
@@ -20,4 +21,6 @@ public interface UserService {
     public int UpdateHeader(Integer id, String headerUrl);
 
     public int Updatepassword(Integer id, String password);
+
+    public Map<String, Object> registerUser(UserEntity userEntity);
 }
