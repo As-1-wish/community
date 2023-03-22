@@ -37,6 +37,7 @@ public class LoginController {
         }else{
             model.addAttribute("usernameMsg", map.get("usernameMsg"));
             model.addAttribute("emailMsg", map.get("emailMsg"));
+            model.addAttribute("user", userEntity);
             return "/site/register";
         }
     }

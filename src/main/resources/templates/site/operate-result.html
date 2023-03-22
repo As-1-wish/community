@@ -141,8 +141,9 @@
 	<script>
 		$(function(){
 			setInterval(function(){
-				let seconds = $("#seconds").text();
-				seconds.text(--seconds);
+				let secondsTool = $("#seconds")
+				let seconds = secondsTool.text()
+				secondsTool.text(--seconds);
 				if(seconds === 0) {
 					location.href = $("#target").attr("href");
 				}

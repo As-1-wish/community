@@ -18,8 +18,8 @@ public class UserEntity {
             pkColumnName = "pre_Key", //指定主键生成表的主键列的名称
             valueColumnName = "prekey_value", //用来自定义在主键生成表中存储ID的列名称
             pkColumnValue = "user_key",  //为当前主键生成器指定在生成器表中的主键值,用于将这组生成的值与可能存储在表中的其他值区分开来
-            allocationSize = 1   //每次获取主键增量值,默认为50
-           // initialValue = 1000   //初始化主键值
+            allocationSize = 1  //每次获取主键增量值,默认为50
+//            initialValue = 1000   //初始化主键值
     )
     @Column(name = "id", columnDefinition = "int(11) NOT NULL comment '用户ID'")
     private int id;
