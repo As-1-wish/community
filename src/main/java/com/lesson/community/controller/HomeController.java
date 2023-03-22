@@ -35,7 +35,7 @@ public class HomeController {
      * @param model 负责在 Controller 与 View 之间传递数据
      * @return String
      * @author hwj
-     * @Description 初始化首页, 查询10条帖子显示在首页
+     * @Description 初始化首页, 查询 limit(受page实体影响) 条帖子显示在首页
      * @date 2023/3/20 15:51
      */
     @RequestMapping(path = "/", method = RequestMethod.GET)
