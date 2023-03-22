@@ -17,14 +17,22 @@ import javax.mail.internet.MimeMessage;
  * @Created by hwj
  */
 @Service
-public class MailClient {
+public class MailClientUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(MailClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(MailClientUtil.class);
     @Autowired
     private JavaMailSender mailSender;
     @Value("${spring.mail.username}")
     private String from;
 
+    /**
+     * @author hwj
+     * @Description 邮件发送函数
+     * @date 2023/3/22 15:52
+     * @param to 接收人
+     * @param subject 邮件主题
+     * @param content 邮件内容
+     */
     public void senMail(String to, String subject, String content) {
         try {
             // JavaMainlSender 通过构建出的 mimeMessage 发送邮件
