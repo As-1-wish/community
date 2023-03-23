@@ -6,23 +6,22 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserService {
-    public List<UserEntity> findAll();
+    List<UserEntity> findAll();
 
-    public void saveAndFlush(UserEntity userEntity);
 
     UserEntity getUserEntityByID(Integer id);
 
     UserEntity getUserEntityByName(String name);
 
-    UserEntity getUserEntityByEmail(String email);
+    int UpdateStatus(Integer id, Integer status);
 
-    public int UpdateStatus(Integer id, Integer status);
+    int UpdateHeader(Integer id, String headerUrl);
 
-    public int UpdateHeader(Integer id, String headerUrl);
+    int Updatepassword(Integer id, String password);
 
-    public int Updatepassword(Integer id, String password);
+    Map<String, Object> registerUser(UserEntity userEntity);
 
-    public Map<String, Object> registerUser(UserEntity userEntity);
+    int activate(int userId, String code);
 
-    public int activate(int userId, String code);
+    Map<String, Object> loginUser(String username, String password, int expiredSeconds);
 }

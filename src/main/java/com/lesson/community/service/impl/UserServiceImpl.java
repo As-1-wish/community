@@ -1,6 +1,8 @@
 package com.lesson.community.service.impl;
 
+import com.lesson.community.dao.LoginTicketRepository;
 import com.lesson.community.dao.UserRepository;
+import com.lesson.community.entity.LoginTicketEntity;
 import com.lesson.community.entity.UserEntity;
 import com.lesson.community.service.UserService;
 import com.lesson.community.util.CommunityUtil;
@@ -33,45 +35,8 @@ public class UserServiceImpl implements UserService, ConstantUtil {
     @Autowired
     private MailClientUtil mailClient;
 
-    @Override
-    public List<UserEntity> findAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public void saveAndFlush(UserEntity userEntity) {
-        userRepository.saveAndFlush(userEntity);
-    }
-
-    @Override
-    public UserEntity getUserEntityByID(Integer id) {
-        return userRepository.getUserEntityByID(id);
-    }
-
-    @Override
-    public UserEntity getUserEntityByName(String name) {
-        return userRepository.getUserEntityByName(name);
-    }
-
-    @Override
-    public UserEntity getUserEntityByEmail(String email) {
-        return userRepository.getUserEntityByEmail(email);
-    }
-
-    @Override
-    public int UpdateStatus(Integer id, Integer status) {
-        return userRepository.UpdateStatus(id, status);
-    }
-
-    @Override
-    public int UpdateHeader(Integer id, String headerUrl) {
-        return userRepository.UpdateHeader(id, headerUrl);
-    }
-
-    @Override
-    public int Updatepassword(Integer id, String password) {
-        return userRepository.UpdatePassword(id, password);
-    }
+    @Autowired
+    private LoginTicketRepository loginTicketRepository;
 
     /**
      * @param userEntity 用户实体
@@ -137,4 +102,69 @@ public class UserServiceImpl implements UserService, ConstantUtil {
         } else
             return ACTIVATION_FAILURE;
     }
+
+    /**
+     * @author hwj
+     * @Description 用户登录业务
+     * @date 2023/3/23 15:01
+     */
+    public Map<String, Object> loginUser(String username, String password, int expiredSeconds){
+        Map<String, Object> map = new HashMap<>();
+        //验证账号
+        UserEntity user = userRepository.getUserEntityByName(username);
+        if(user==null){ //账号是否存在
+            map.put("usernameMsg", "该账号不存在！");
+            return map;
+        }
+        if(user.getStatus()==0){ //账号是否激活
+            map.put("statusMsg", "该账号未激活！");
+            return map;
+        }
+        if(!user.getPassword().equals(CommunityUtil.Encrypt(password + user.getSalt()))){ // 密码是否正确
+            map.put("passwordMsg", "密码错误！");
+            return map;
+        }
+
+        //生成登录凭证
+        LoginTicketEntity loginTicket = new LoginTicketEntity();
+        loginTicket.setUserId(user.getId());
+        loginTicket.setTicket(CommunityUtil.getUUID());
+        loginTicket.setExpired(new Timestamp(new Date().getTime() + expiredSeconds * 1000L));
+        loginTicketRepository.saveAndFlush(loginTicket);
+        map.put("ticket", loginTicket.getTicket());
+
+        return map;
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public UserEntity getUserEntityByID(Integer id) {
+        return userRepository.getUserEntityByID(id);
+    }
+
+    @Override
+    public UserEntity getUserEntityByName(String name) {
+        return userRepository.getUserEntityByName(name);
+    }
+
+
+    @Override
+    public int UpdateStatus(Integer id, Integer status) {
+        return userRepository.UpdateStatus(id, status);
+    }
+
+    @Override
+    public int UpdateHeader(Integer id, String headerUrl) {
+        return userRepository.UpdateHeader(id, headerUrl);
+    }
+
+    @Override
+    public int Updatepassword(Integer id, String password) {
+        return userRepository.UpdatePassword(id, password);
+    }
+
 }

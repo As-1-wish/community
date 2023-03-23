@@ -3,7 +3,6 @@ package com.lesson.community.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
@@ -22,7 +21,7 @@ public class LoginTicketEntity {
     @Column(name = "ticket", columnDefinition = "varchar(45) DEFAULT NULL")
     private String ticket;
 
-    @Column(name = "status", columnDefinition = "int(11) DEFAULT '0' comment '0-有效;1-无效'")
+    @Column(name = "status", columnDefinition = "int(11) DEFAULT 0 comment '0-有效;1-无效'")
     private int status;
 
     @Column(name = "expired", columnDefinition = "timestamp NULL DEFAULT NULL")
