@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository //同@Service、@Controller 和 @Component 将类标识为Bean,只能用在Dao层
-public interface UserDao extends JpaRepository<UserEntity, Integer> {
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     //nativeQuery = true 表明是可以执行原生语句(将此句复制到mysql,给一个参数就可以运行)
     @Query(value = "SELECT u FROM UserEntity u WHERE u.id = ?1")

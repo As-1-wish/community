@@ -1,10 +1,13 @@
 package com.lesson.community.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
+@Data
 @Table(name = "login_ticket")
 public class LoginTicketEntity {
 

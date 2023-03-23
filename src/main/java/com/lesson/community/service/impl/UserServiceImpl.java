@@ -1,6 +1,6 @@
 package com.lesson.community.service.impl;
 
-import com.lesson.community.dao.UserDao;
+import com.lesson.community.dao.UserRepository;
 import com.lesson.community.entity.UserEntity;
 import com.lesson.community.service.UserService;
 import com.lesson.community.util.CommunityUtil;
@@ -19,7 +19,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService, ConstantUtil {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Value("${community.path.domain}")
     private String domain;
@@ -35,42 +35,42 @@ public class UserServiceImpl implements UserService, ConstantUtil {
 
     @Override
     public List<UserEntity> findAll() {
-        return userDao.findAll();
+        return userRepository.findAll();
     }
 
     @Override
     public void saveAndFlush(UserEntity userEntity) {
-        userDao.saveAndFlush(userEntity);
+        userRepository.saveAndFlush(userEntity);
     }
 
     @Override
     public UserEntity getUserEntityByID(Integer id) {
-        return userDao.getUserEntityByID(id);
+        return userRepository.getUserEntityByID(id);
     }
 
     @Override
     public UserEntity getUserEntityByName(String name) {
-        return userDao.getUserEntityByName(name);
+        return userRepository.getUserEntityByName(name);
     }
 
     @Override
     public UserEntity getUserEntityByEmail(String email) {
-        return userDao.getUserEntityByEmail(email);
+        return userRepository.getUserEntityByEmail(email);
     }
 
     @Override
     public int UpdateStatus(Integer id, Integer status) {
-        return userDao.UpdateStatus(id, status);
+        return userRepository.UpdateStatus(id, status);
     }
 
     @Override
     public int UpdateHeader(Integer id, String headerUrl) {
-        return userDao.UpdateHeader(id, headerUrl);
+        return userRepository.UpdateHeader(id, headerUrl);
     }
 
     @Override
     public int Updatepassword(Integer id, String password) {
-        return userDao.UpdatePassword(id, password);
+        return userRepository.UpdatePassword(id, password);
     }
 
     /**
@@ -84,11 +84,11 @@ public class UserServiceImpl implements UserService, ConstantUtil {
         Map<String, Object> map = new HashMap<>();
         // 字段是否为空前台已经处理，保证传过来的值不会为空
         //验证待注册账号
-        if (userDao.getUserEntityByName(userEntity.getUsername()) != null) {
+        if (userRepository.getUserEntityByName(userEntity.getUsername()) != null) {
             map.put("usernameMsg", "该账号已存在！");
             return map;
         }
-        if (userDao.getUserEntityByEmail(userEntity.getEmail()) != null) {
+        if (userRepository.getUserEntityByEmail(userEntity.getEmail()) != null) {
             map.put("emailMsg", "该邮箱已被注册！");
             return map;
         }
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService, ConstantUtil {
                 new Random().nextInt(1000)));
         userEntity.setCreateTime(new Timestamp(new Date().getTime()));
 
-        userDao.saveAndFlush(userEntity);
+        userRepository.saveAndFlush(userEntity);
 
         // 发送激活邮件
         Context context = new Context();
@@ -128,11 +128,11 @@ public class UserServiceImpl implements UserService, ConstantUtil {
     @Override
     public int activate(int userId, String code) {
         System.out.printf(String.format("userService层:userID=%d, code=%s", userId, code));
-        UserEntity user = userDao.getUserEntityByID(userId);
+        UserEntity user = userRepository.getUserEntityByID(userId);
         if (user.getStatus() == 1)
             return ACTIVATION_REPEAT;
         else if (user.getActivationCode().equals(code)) {
-            userDao.UpdateStatus(userId, 1);
+            userRepository.UpdateStatus(userId, 1);
             return ACTIVATION_SUCCESS;
         } else
             return ACTIVATION_FAILURE;

@@ -1,5 +1,7 @@
 import com.lesson.community.CommunityApplication;
+import com.lesson.community.dao.LoginTicketRepository;
 import com.lesson.community.entity.DiscussPostEntity;
+import com.lesson.community.entity.LoginTicketEntity;
 import com.lesson.community.entity.UserEntity;
 import com.lesson.community.service.DiscussPostService;
 import com.lesson.community.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -59,5 +62,16 @@ public class MyTest {
         for(DiscussPostEntity dis : tmp){
             System.out.println(dis.toString());
         }
+    }
+
+    @Autowired
+    private LoginTicketRepository loginTicketRepository;
+
+    @Test
+    public void testLoginTicket(){
+//        LoginTicketEntity loginTicket = new LoginTicketEntity(2, "idfnisad", 1,
+//                new Timestamp(new Date().getTime()));
+//        loginTicketRepository.saveAndFlush(loginTicket);
+        loginTicketRepository.UpdateStatus("idfnisad", 0);
     }
 }
