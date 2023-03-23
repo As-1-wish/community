@@ -38,7 +38,7 @@ public class HomeController {
      * @Description 初始化首页, 查询 limit(受page实体影响) 条帖子显示在首页
      * @date 2023/3/20 15:51
      */
-    @RequestMapping(path = "/", method = RequestMethod.GET)
+    @RequestMapping(path = "/index", method = RequestMethod.GET)
     public String getIndexPage(Model model, PageObject page) {
         //方法调用前, SpringMVC 会自动实例化 Model 和 Page, 并将 Page 注入 Model
         //所以在 thymeleaf 中可以直接访问 Page 对象中的数据
@@ -60,6 +60,8 @@ public class HomeController {
         }
         model.addAttribute("discussPosts", discussPosts);
         model.addAttribute("page", page);
+        System.out.println(page.getPageRange().getKey());
+        System.out.println(page.getPageRange().getValue());
         return "/index";
     }
 }

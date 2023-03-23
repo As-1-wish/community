@@ -23,4 +23,6 @@ public interface UserService {
     public int Updatepassword(Integer id, String password);
 
     public Map<String, Object> registerUser(UserEntity userEntity);
+
+    public int activate(int userId, String code);
 }

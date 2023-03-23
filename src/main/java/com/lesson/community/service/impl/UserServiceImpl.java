@@ -4,6 +4,7 @@ import com.lesson.community.dao.UserDao;
 import com.lesson.community.entity.UserEntity;
 import com.lesson.community.service.UserService;
 import com.lesson.community.util.CommunityUtil;
+import com.lesson.community.util.ConstantUtil;
 import com.lesson.community.util.MailClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, ConstantUtil {
 
     @Autowired
     private UserDao userDao;
@@ -72,6 +73,12 @@ public class UserServiceImpl implements UserService {
         return userDao.UpdatePassword(id, password);
     }
 
+    /**
+     * @param userEntity 用户实体
+     * @author hwj
+     * @Description 用户注册业务
+     * @date 2023/3/22 21:47
+     */
     @Override
     public Map<String, Object> registerUser(UserEntity userEntity) {
         Map<String, Object> map = new HashMap<>();
@@ -100,13 +107,32 @@ public class UserServiceImpl implements UserService {
         // 发送激活邮件
         Context context = new Context();
         context.setVariable("email", userEntity.getEmail());
-        // 激活链接:https://localhost:8081/community/activation/101/code
+        // 激活链接:https://localhost:8080/community/activation/101/code
         String url = domain + contextPath + "/activation/" + userEntity.getId()
-                    + "/" + userEntity.getActivationCode();
+                + "/" + userEntity.getActivationCode();
         context.setVariable("url", url);
         String content = templateEngine.process("/mail/activation", context);
         mailClient.senMail(userEntity.getEmail(), "牛客账号激活", content);
 
         return map;
+    }
+
+    /**
+     * @param userId 待激活用户ID
+     * @param code   待激活用户所提供激活码
+     * @author hwj
+     * @Description 进行用户账户激活
+     * @date 2023/3/22 21:50
+     */
+    @Override
+    public int activate(int userId, String code) {
+        UserEntity user = userDao.getUserEntityByID(userId);
+        if (user.getStatus() == 1)
+            return ACTIVATION_REPEAT;
+        else if (user.getActivationCode().equals(code)) {
+            userDao.UpdateStatus(userId, 1);
+            return ACTIVATION_SUCCESS;
+        } else
+            return ACTIVATION_FAILURE;
     }
 }

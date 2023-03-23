@@ -62,12 +62,14 @@ public class PageObject {
         if (begin < 1) {
             begin = 1;
             if (getPages() >= 5)
-                end += 4;
+                end = begin + 4;
+            else
+                end = getPages();
         }
         if (end > getPages()) {
-            if (getPages() >= 5)
-                begin = getPages() - 4;
             end = getPages();
+            if (getPages() >= 5)
+                begin = end - 4;
         }
         return new Pair<>(begin, end);
     }
