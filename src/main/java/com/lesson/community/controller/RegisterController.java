@@ -40,7 +40,7 @@ public class RegisterController implements ConstantUtil {
         Map<String ,Object> map = userService.registerUser(userEntity);
         if(map == null||map.isEmpty()){
             model.addAttribute("msg", "注册成功,我们已将向您的邮箱发送来一封激活邮件,请尽快激活！");
-            model.addAttribute("target","/");
+            model.addAttribute("target","/index");
             return "/site/operate-result";
         }else{
             model.addAttribute("usernameMsg", map.get("usernameMsg"));
@@ -67,10 +67,10 @@ public class RegisterController implements ConstantUtil {
             model.addAttribute("target","/login");
         }else if(activation==ACTIVATION_FAILURE){
             model.addAttribute("msg", "激活失败,请重试！");
-            model.addAttribute("target","/");
+            model.addAttribute("target","/index");
         }else{
             model.addAttribute("msg", "无效操作,该账户已被激活！");
-            model.addAttribute("target","/");
+            model.addAttribute("target","/index");
         }
         return "/site/operate-result";
     }

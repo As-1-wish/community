@@ -107,9 +107,10 @@ public class UserServiceImpl implements UserService, ConstantUtil {
         // 发送激活邮件
         Context context = new Context();
         context.setVariable("email", userEntity.getEmail());
-        // 激活链接:https://localhost:8080/community/activation/101/code
+        // 激活链接:https://localhost:8081/community/activation/101/code
         String url = domain + contextPath + "/activation/" + userEntity.getId()
                 + "/" + userEntity.getActivationCode();
+        System.out.println(url);
         context.setVariable("url", url);
         String content = templateEngine.process("/mail/activation", context);
         mailClient.senMail(userEntity.getEmail(), "牛客账号激活", content);
@@ -126,6 +127,7 @@ public class UserServiceImpl implements UserService, ConstantUtil {
      */
     @Override
     public int activate(int userId, String code) {
+        System.out.printf(String.format("userService层:userID=%d, code=%s", userId, code));
         UserEntity user = userDao.getUserEntityByID(userId);
         if (user.getStatus() == 1)
             return ACTIVATION_REPEAT;

@@ -60,8 +60,6 @@ public class HomeController {
         }
         model.addAttribute("discussPosts", discussPosts);
         model.addAttribute("page", page);
-        System.out.println(page.getPageRange().getKey());
-        System.out.println(page.getPageRange().getValue());
         return "/index";
     }
 }
