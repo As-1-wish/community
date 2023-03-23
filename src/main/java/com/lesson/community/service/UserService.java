@@ -24,4 +24,6 @@ public interface UserService {
     int activate(int userId, String code);
 
     Map<String, Object> loginUser(String username, String password, int expiredSeconds);
+
+    void logoutUser(String ticket);
 }

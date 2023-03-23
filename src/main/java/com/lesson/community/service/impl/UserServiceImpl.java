@@ -129,11 +129,21 @@ public class UserServiceImpl implements UserService, ConstantUtil {
         LoginTicketEntity loginTicket = new LoginTicketEntity();
         loginTicket.setUserId(user.getId());
         loginTicket.setTicket(CommunityUtil.getUUID());
+        loginTicket.setStatus(0);
         loginTicket.setExpired(new Timestamp(new Date().getTime() + expiredSeconds * 1000L));
         loginTicketRepository.saveAndFlush(loginTicket);
         map.put("ticket", loginTicket.getTicket());
 
         return map;
+    }
+
+    /**
+     * @author hwj
+     * @Description 登出
+     * @date 2023/3/23 16:15
+     */
+    public void logoutUser(String ticket){
+        loginTicketRepository.UpdateStatus(ticket, 1);
     }
 
     @Override
