@@ -58,8 +58,6 @@ public class RegisterController implements ConstantUtil {
     // 激活链接:https://localhost:8081/community/activation/101/code
     @RequestMapping(path = "/activation/{userId}/{code}", method = RequestMethod.GET)
     public String activate(Model model, @PathVariable("userId") int userId, @PathVariable("code") String code){
-        System.out.println(userId);
-        System.out.println(code);
         int activation = userService.activate(userId, code);
 
         if(activation==ACTIVATION_SUCCESS){

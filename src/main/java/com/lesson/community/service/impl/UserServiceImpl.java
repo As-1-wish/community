@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService, ConstantUtil {
         // 激活链接:https://localhost:8081/community/activation/101/code
         String url = domain + contextPath + "/activation/" + userEntity.getId()
                 + "/" + userEntity.getActivationCode();
-        System.out.println(url);
+        System.out.printf("激活链接为:%s",url);
         context.setVariable("url", url);
         String content = templateEngine.process("/mail/activation", context);
         mailClient.senMail(userEntity.getEmail(), "牛客账号激活", content);
