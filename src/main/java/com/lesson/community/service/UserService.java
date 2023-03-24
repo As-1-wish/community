@@ -29,4 +29,6 @@ public interface UserService {
     void logoutUser(String ticket);
 
     LoginTicketEntity getUserEntityByTicket(String ticket);
+
+
 }
