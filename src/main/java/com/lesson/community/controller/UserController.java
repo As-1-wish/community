@@ -1,5 +1,6 @@
 package com.lesson.community.controller;
 
+import com.lesson.community.annotation.LoginRequired;
 import com.lesson.community.entity.UserEntity;
 import com.lesson.community.service.UserService;
 import com.lesson.community.util.CommunityUtil;
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +47,7 @@ public class UserController {
     @Autowired
     private HostHolderUntil holderUntil;
 
+    @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
     public String getSettingPage() {
         return "/site/setting";
@@ -57,6 +58,7 @@ public class UserController {
      * @Description 修改用户头像信息, 并接收用户上传的头像文件
      * @date 2023/3/24 11:25
      */
+    @LoginRequired
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {
         if (headerImage == null) {
@@ -108,10 +110,10 @@ public class UserController {
         response.setContentType("image/" + suffix);
         try (
                 OutputStream os = response.getOutputStream();
-                FileInputStream fis = new FileInputStream(filename);
+                FileInputStream fis = new FileInputStream(filename)
         ) {
             byte[] buffer = new byte[1024];
-            int b = 0;
+            int b;
             while ((b = fis.read(buffer)) != -1) {
                 os.write(buffer, 0, b);
             }
@@ -121,6 +123,7 @@ public class UserController {
         }
     }
 
+    @LoginRequired
     @RequestMapping(path = "/pwd", method = RequestMethod.POST)
     public String ModifyPassword(String old_password, String new_password, String confirm_password, Model model){
         UserEntity user = holderUntil.getUser();
