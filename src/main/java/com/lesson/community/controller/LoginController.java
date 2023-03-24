@@ -91,16 +91,13 @@ public class LoginController implements ConstantUtil {
         // 检查账号密码
         int expiredSeconds = rememberMe ? REMENBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
         Map<String, Object> map = userService.loginUser(username, password, expiredSeconds);
-        System.out.println("进行判断");
         if(map.containsKey("ticket")) {  // 有 ticket 表明登录成功,后台返回了登录凭证
             Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
             cookie.setPath(contextPath);
             cookie.setMaxAge(expiredSeconds);
             response.addCookie(cookie);
-            System.out.println("可以登录");
             return "redirect:/index";
         }else{
-            System.out.println("不大行");
             model.addAttribute("usernameMsg", map.get("usernameMsg"));
             model.addAttribute("passwordMsg", map.get("passwordMsg"));
             return "/site/login";

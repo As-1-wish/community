@@ -27,8 +27,6 @@ public class DiscussPostServiceImpl implements DiscussPostService {
 
     @Override
     public int getDiscussPostRows(int userid) {
-        int total = discussPostDao.getDiscussPostRows(userid);
-        System.out.printf("查询到的userid为%d的用户的帖子有%d条\n", userid, total);
-        return total;
+        return discussPostDao.getDiscussPostRows(userid);
     }
 }

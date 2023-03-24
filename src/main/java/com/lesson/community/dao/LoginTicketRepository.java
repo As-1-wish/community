@@ -39,7 +39,6 @@ public class LoginTicketRepository {
                 .append(",'").append(loginTicket.getTicket()).append("',")
                 .append(loginTicket.getStatus()).append(",'").append(loginTicket.getExpired())
                 .append("')");
-        System.out.println(sql.toString());
 
         try {
             Query query = entityManager.createNativeQuery(sql.toString());
@@ -85,7 +84,6 @@ public class LoginTicketRepository {
     public void UpdateStatus(String ticket, int stauts) {
         String sql = String.format("update login_ticket set status = %d where ticket = '%s'", stauts, ticket);
 
-        System.out.println(sql);
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
 

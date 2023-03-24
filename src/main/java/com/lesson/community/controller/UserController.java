@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -118,5 +119,26 @@ public class UserController {
         } catch (IOException e) {
             logger.error("读取头像失败:" + e.getMessage());
         }
+    }
+
+    @RequestMapping(path = "/pwd", method = RequestMethod.POST)
+    public String ModifyPassword(String old_password, String new_password, String confirm_password, Model model){
+        UserEntity user = holderUntil.getUser();
+
+        if(!new_password.equals(confirm_password)){
+            model.addAttribute("repwdError", "两次输入密码不一致！");
+            return "/site/setting";
+        }
+        if(!user.getPassword().equals(CommunityUtil.Encrypt(old_password + user.getSalt()))){
+            model.addAttribute("pwdError", "原密码输入错误！");
+            return "/site/setting";
+        }
+        if(old_password.equals(new_password)){
+            model.addAttribute("repwdError", "新密码不能与旧密码一致！");
+            model.addAttribute("oldpwd", old_password);
+            return "/site/setting";
+        }
+        userService.ModifyPassword(user.getId(), new_password);
+        return "redirect:/index";
     }
 }

@@ -30,5 +30,5 @@ public interface UserService {
 
     LoginTicketEntity getUserEntityByTicket(String ticket);
 
-
+   void ModifyPassword(int userId, String newPwd);
 }

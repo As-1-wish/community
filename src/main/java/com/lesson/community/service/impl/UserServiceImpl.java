@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService, ConstantUtil {
         // 激活链接:https://localhost:8081/community/activation/101/code
         String url = domain + contextPath + "/activation/" + userEntity.getId()
                 + "/" + userEntity.getActivationCode();
-        System.out.printf("激活链接为:%s",url);
+        System.out.printf("激活链接为:%s", url);
         context.setVariable("url", url);
         String content = templateEngine.process("/mail/activation", context);
         mailClient.senMail(userEntity.getEmail(), "牛客账号激活", content);
@@ -108,19 +108,19 @@ public class UserServiceImpl implements UserService, ConstantUtil {
      * @Description 用户登录业务
      * @date 2023/3/23 15:01
      */
-    public Map<String, Object> loginUser(String username, String password, int expiredSeconds){
+    public Map<String, Object> loginUser(String username, String password, int expiredSeconds) {
         Map<String, Object> map = new HashMap<>();
         //验证账号
         UserEntity user = userRepository.getUserEntityByName(username);
-        if(user==null){ //账号是否存在
+        if (user == null) { //账号是否存在
             map.put("usernameMsg", "该账号不存在！");
             return map;
         }
-        if(user.getStatus()==0){ //账号是否激活
+        if (user.getStatus() == 0) { //账号是否激活
             map.put("statusMsg", "该账号未激活！");
             return map;
         }
-        if(!user.getPassword().equals(CommunityUtil.Encrypt(password + user.getSalt()))){ // 密码是否正确
+        if (!user.getPassword().equals(CommunityUtil.Encrypt(password + user.getSalt()))) { // 密码是否正确
             map.put("passwordMsg", "密码错误！");
             return map;
         }
@@ -142,13 +142,26 @@ public class UserServiceImpl implements UserService, ConstantUtil {
      * @Description 登出
      * @date 2023/3/23 16:15
      */
-    public void logoutUser(String ticket){
+    public void logoutUser(String ticket) {
         loginTicketRepository.UpdateStatus(ticket, 1);
     }
 
     @Override
     public LoginTicketEntity getUserEntityByTicket(String ticket) {
         return loginTicketRepository.getOneByTicket(ticket);
+    }
+
+    /**
+     * @author hwj
+     * @Description 用户更新密码
+     * @date 2023/3/24 13:15
+     */
+    @Override
+    public void ModifyPassword(int userId, String newPwd) {
+        String salt = CommunityUtil.getUUID().substring(0, 5);
+        String pwd = CommunityUtil.Encrypt(newPwd + salt);
+        userRepository.UpdateSalt(userId, salt);
+        userRepository.UpdatePassword(userId, pwd);
     }
 
     @Override
