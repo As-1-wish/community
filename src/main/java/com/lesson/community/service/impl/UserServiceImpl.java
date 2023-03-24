@@ -147,6 +147,11 @@ public class UserServiceImpl implements UserService, ConstantUtil {
     }
 
     @Override
+    public LoginTicketEntity getUserEntityByTicket(String ticket) {
+        return loginTicketRepository.getOneByTicket(ticket);
+    }
+
+    @Override
     public List<UserEntity> findAll() {
         return userRepository.findAll();
     }

@@ -1,5 +1,6 @@
 package com.lesson.community.service;
 
+import com.lesson.community.entity.LoginTicketEntity;
 import com.lesson.community.entity.UserEntity;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface UserService {
     Map<String, Object> loginUser(String username, String password, int expiredSeconds);
 
     void logoutUser(String ticket);
+
+    LoginTicketEntity getUserEntityByTicket(String ticket);
 }

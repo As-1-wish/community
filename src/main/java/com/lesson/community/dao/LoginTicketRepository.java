@@ -57,7 +57,7 @@ public class LoginTicketRepository {
      */
     public LoginTicketEntity getOneByTicket(String ticket) {
         LoginTicketEntity loginTicket = new LoginTicketEntity();
-        String sql = "select * from login_ticket where ticket = ticket";
+        String sql = String.format("select * from login_ticket where ticket = '%s'", ticket);
 
         Object[] obs = new Object[0];
         try {
@@ -82,7 +82,7 @@ public class LoginTicketRepository {
      * @date 2023/3/23 14:34
      */
     @Transactional
-    public void UpdateStatus(String ticket, int stauts){
+    public void UpdateStatus(String ticket, int stauts) {
         String sql = String.format("update login_ticket set status = %d where ticket = '%s'", stauts, ticket);
 
         System.out.println(sql);
