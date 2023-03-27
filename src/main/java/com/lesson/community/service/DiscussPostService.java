@@ -15,7 +15,7 @@ public interface DiscussPostService {
      * @param limit  返回的最大行数
      * @return List<DiscussPostEntity>
      */
-    public List<DiscussPostEntity> getDiscussPosts(int userid, int offset, int limit);
+    List<DiscussPostEntity> getDiscussPosts(int userid, int offset, int limit);
 
     /**
      * @author hwj
@@ -25,4 +25,6 @@ public interface DiscussPostService {
      * @return int
      */
     int getDiscussPostRows(int userid);
+
+    void insertDiscussPost(DiscussPostEntity discussPostEntity);
 }

@@ -32,7 +32,6 @@ public class SensitiveFilter {
 
     @PostConstruct
     public void init() {
-        System.out.println("初始化后构造");
         try (
                 InputStream is = this.getClass().getClassLoader().getResourceAsStream("sensitive-words.txt")) {
             assert is != null;
@@ -45,7 +44,6 @@ public class SensitiveFilter {
         } catch (IOException e) {
             logger.error("加载敏感词文件失败！" + e.getMessage());
         }
-        System.out.println("构造完成");
     }
 
     // 将一个敏感词添加到前缀树中

@@ -11,7 +11,7 @@
 <body>
 <div class="nk-container">
     <!-- 头部 -->
-    <header class="bg-dark sticky-top" th:fragment="header">
+    <header class="bg-dark sticky-top" th:fragment="header" >
         <div class="container">
             <!-- 导航 -->
             <nav class="navbar navbar-expand-lg navbar-dark">
@@ -78,6 +78,7 @@
                     </li>
                 </ul>
                 <button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal"
+                        th:if="${loginUser!=null}"
                         data-target="#publishModal">我要发布
                 </button>
             </div>
@@ -93,7 +94,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form method="post">
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">标题：</label>
                                     <input type="text" class="form-control" id="recipient-name">
