@@ -7,7 +7,6 @@ import com.lesson.community.util.CookieUtil;
 import com.lesson.community.util.HostHolderUntil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,7 +35,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
      * @date 2023/3/24 9:50
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
         // 从 cookie 中获取凭证
         String ticket = CookieUtil.getValue(request, "ticket");
 
@@ -60,7 +59,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
      * @date 2023/3/24 9:52
      */
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         UserEntity user = holderUntil.getUser();
         if (user != null && modelAndView != null) {
             modelAndView.addObject("loginUser", user);
@@ -73,7 +72,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
      * @date 2023/3/24 9:55
      */
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         holderUntil.clear();
     }
 }
