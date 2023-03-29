@@ -27,4 +27,6 @@ public interface DiscussPostService {
     int getDiscussPostRows(int userid);
 
     void insertDiscussPost(DiscussPostEntity discussPostEntity);
+
+    DiscussPostEntity getDiscussPostByID(int id);
 }

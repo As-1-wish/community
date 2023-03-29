@@ -55,5 +55,10 @@ public class DiscussPostServiceImpl implements DiscussPostService {
         discussPostDao.saveAndFlush(discussPost);
     }
 
+    @Override
+    public DiscussPostEntity getDiscussPostByID(int id) {
+        return discussPostDao.getDiscussPostById(id);
+    }
+
 
 }

@@ -21,4 +21,7 @@ public interface DiscussPostDao extends JpaRepository<DiscussPostEntity, Integer
     List<DiscussPostEntity> getDiscussPosts(@Param("userid") int userid,
                                             @Param("offset") int offset,
                                              @Param("limit") int limit);
+
+    @Query(value = "select dis from DiscussPostEntity dis where dis.id = :id")
+    DiscussPostEntity getDiscussPostById(@Param("id")int id);
 }
