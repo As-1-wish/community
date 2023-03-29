@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DiscussPostDao extends JpaRepository<DiscussPostEntity, Integer> {
+public interface DiscussPostRepository extends JpaRepository<DiscussPostEntity, Integer> {
 
     @Query(value = "SELECT count(*) from discuss_post  where status != 2 and " +
             "if(:userid != 0, user_id=:userid,1=1)", nativeQuery = true)

@@ -18,12 +18,18 @@ public class CommentEntity {
     @Column(name = "user_id", columnDefinition = "int(11) DEFAULT NULL")
     private int userId;
 
+    /**
+     * @Description 表明评论类别--评论帖子还是评论评论 1--帖子, 2--评论
+     */
     @Column(name = "entity_type", columnDefinition = "int(11) DEFAULT NULL")
     private int entityType;
 
     @Column(name = "entity_id", columnDefinition = "int(11) DEFAULT NULL")
     private int entityId;
 
+    /**
+     * @Description 表明该评论指向用户
+     */
     @Column(name = "target_id", columnDefinition = "int(11) DEFAULT NULL")
     private int targetId;
 

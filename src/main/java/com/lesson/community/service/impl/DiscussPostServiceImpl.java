@@ -1,6 +1,6 @@
 package com.lesson.community.service.impl;
 
-import com.lesson.community.dao.DiscussPostDao;
+import com.lesson.community.dao.DiscussPostRepository;
 import com.lesson.community.entity.DiscussPostEntity;
 import com.lesson.community.service.DiscussPostService;
 import com.lesson.community.util.SensitiveFilter;
@@ -20,19 +20,19 @@ import java.util.List;
 public class DiscussPostServiceImpl implements DiscussPostService {
 
     @Autowired
-    private DiscussPostDao discussPostDao;
+    private DiscussPostRepository discussPostRepository;
 
     @Autowired
     private SensitiveFilter sensitiveFilter;
 
     @Override
     public List<DiscussPostEntity> getDiscussPosts(int userid, int offset, int limit) {
-        return discussPostDao.getDiscussPosts(userid, offset, limit);
+        return discussPostRepository.getDiscussPosts(userid, offset, limit);
     }
 
     @Override
     public int getDiscussPostRows(int userid) {
-        return discussPostDao.getDiscussPostRows(userid);
+        return discussPostRepository.getDiscussPostRows(userid);
     }
 
     /**
@@ -52,12 +52,12 @@ public class DiscussPostServiceImpl implements DiscussPostService {
         discussPost.setTitle(sensitiveFilter.filter(discussPost.getTitle()));
         discussPost.setContent(sensitiveFilter.filter(discussPost.getContent()));
 
-        discussPostDao.saveAndFlush(discussPost);
+        discussPostRepository.saveAndFlush(discussPost);
     }
 
     @Override
     public DiscussPostEntity getDiscussPostByID(int id) {
-        return discussPostDao.getDiscussPostById(id);
+        return discussPostRepository.getDiscussPostById(id);
     }
 
 
