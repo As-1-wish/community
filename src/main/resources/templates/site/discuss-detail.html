@@ -130,20 +130,27 @@
 									<li class="d-inline ml-2"><a href="#" class="text-primary">赞(1)</a></li>
 									<li class="d-inline ml-2">|</li>
 									<li class="d-inline ml-2">
-										<a th:href="@{'#plhuifu-'+${cmsStat.count}}" class="text-primary" onclick="reply_show()">回复(
+										<a th:href="@{'#plhuifu-'+${cmsStat.count}}" th:id="|th-${cmsStat.count}|"
+										   class="text-primary" data-toggle="collapse" onclick="show_color(this.id)">回复(
 										<script th:inline="javascript">
-											function reply_show(){
-												console.log([[${cmsStat.count}]])
-												let ids = "#plhuifu-" + [[${cmsStat.count}]]
-												let replyInput = document.querySelector(ids)
-												replyInput.style.display=""
+											function show_color(st){
+												let ids = "#pllist-" + st.substring(3)
+												console.log(ids)
+												let pl = document.querySelector(ids)
+												console.log(pl)
+
+												if(!pl.classList.contains("bg-gray"))
+													pl.className += "bg-gray"
+												else
+													pl.classList.remove("bg-gray")
 											}
 										</script>
 										<span th:text="${cms.replyCount}"></span>)</a></li>
 								</ul>
 							</div>
 							<!-- 回复列表 -->
-							<ul class="list-unstyled mt-4 bg-gray p-3 font-size-12 text-muted">
+							<ul th:class="|list-unstyled mt-4 p-3 font-size-12  text-muted ${cms.replies.size!=0?'bg-gray':''}|"
+								th:id="|pllist-${cmsStat.count}|">
 								<li class="pb-3 pt-3 mb-3 border-bottom" th:each="rep:${cms.replies}">
 									<div>
 										<span th:if="${rep.target==null}">
@@ -178,7 +185,7 @@
 									</div>
 								</li>
 								<!--回复输入框-->
-								<li class="pb-3 pt-3" th:id="|plhuifu-${cmsStat.count}|" style="display: none">
+								<li class="pb-3 pt-3 collapse" th:id="|plhuifu-${cmsStat.count}|" >
 									<form method="post" th:action="@{|/comment/add/${post.id}|}">
 										<div>
 											<input type="text" class="input-size" name="content" placeholder="请输入你的观点"/>
@@ -213,7 +220,7 @@
 			<div class="container mt-3" style="display: none" id="replyArea">
 				<form class="replyform" method="post" th:action="@{|/comment/add/${post.id}|}">
 					<p class="mt-3">
-						<a name="replyform"></a>
+						<a id="replyform"></a>
 						<textarea placeholder="在这里畅所欲言你的看法吧!" name="content"></textarea>
 						<input type="hidden" name="entityType" value="1">
 						<input type="hidden" name="entityId" th:value="${post.id}">
