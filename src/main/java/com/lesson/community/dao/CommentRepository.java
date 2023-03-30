@@ -4,7 +4,10 @@ import com.lesson.community.entity.CommentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
@@ -16,4 +19,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
 
     @Query(value = "select count(*) from CommentEntity where entityType=:type and entityId=:id")
     int getCountByType(@Param("type") int EntityType, @Param("id") int EntityID);
+
+
 }

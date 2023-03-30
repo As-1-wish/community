@@ -29,4 +29,6 @@ public interface DiscussPostService {
     void insertDiscussPost(DiscussPostEntity discussPostEntity);
 
     DiscussPostEntity getDiscussPostByID(int id);
+
+    int updateCommentCount(int id, int count);
 }

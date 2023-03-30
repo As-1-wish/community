@@ -2,6 +2,7 @@ package com.lesson.community.dao;
 
 import com.lesson.community.entity.DiscussPostEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -24,4 +25,8 @@ public interface DiscussPostRepository extends JpaRepository<DiscussPostEntity, 
 
     @Query(value = "select dis from DiscussPostEntity dis where dis.id = :id")
     DiscussPostEntity getDiscussPostById(@Param("id")int id);
+
+    @Modifying
+    @Query(value = "update DiscussPostEntity set commentCount = :count where id = :id ")
+    int updateCommentCount(@Param("id") int id, @Param("count") int count);
 }

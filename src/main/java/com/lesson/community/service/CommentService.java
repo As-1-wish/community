@@ -10,4 +10,8 @@ public interface CommentService {
     List<CommentEntity> getCommentsByType(int EntityType, int EntityId, int offset, int limit);
 
     int getCountByType(int EntityType, int EntityId);
+
+    void insertComment(CommentEntity commentEntity);
+
+
 }

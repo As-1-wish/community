@@ -40,5 +40,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     @Modifying
     @Transactional
     @Query(value = "update UserEntity set salt = :salt where id = :id")
-    int UpdateSalt(@Param("id") Integer id, @Param("salt") String salt);
+    void UpdateSalt(@Param("id") Integer id, @Param("salt") String salt);
 }

@@ -60,5 +60,10 @@ public class DiscussPostServiceImpl implements DiscussPostService {
         return discussPostRepository.getDiscussPostById(id);
     }
 
+    @Override
+    public int updateCommentCount(int id, int count) {
+        return discussPostRepository.updateCommentCount(id, count);
+    }
+
 
 }
