@@ -39,8 +39,9 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Integer>
     int getLettersCount(@Param("converstaionId") String conversationId);
 
     //查询未读私信数量
-    @Query(value = "select count(*) from MessageEntity where status = 0 and fromId != 1" +
-            " and toId = :userid and conversationId = :converstaionId")
+    @Query(value = "select count(*) from message where status = 0 and from_id != 1" +
+            " and to_id = :userid and if(:converstaionId != null, conversation_id = :converstaionId, 1=1)",
+            nativeQuery = true)
     int getLetterUnreadCount(@Param("userid") int userid,
                              @Param("converstaionId") String conversationId);
 }

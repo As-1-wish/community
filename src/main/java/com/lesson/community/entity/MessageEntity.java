@@ -1,9 +1,12 @@
 package com.lesson.community.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
+@Data
 @Table(name="message")
 public class MessageEntity {
 

@@ -91,5 +91,7 @@ public class MyTest {
         System.out.println(messageService.getLettersCount("111_112"));
 
         System.out.println(messageService.getLetterUnreadCount(111, "111_112"));
+
+        System.out.println(messageService.getLetterUnreadCount(111, null));
     }
 }
