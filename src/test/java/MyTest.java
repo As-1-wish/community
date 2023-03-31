@@ -1,19 +1,16 @@
 import com.lesson.community.CommunityApplication;
 import com.lesson.community.dao.LoginTicketRepository;
 import com.lesson.community.entity.DiscussPostEntity;
-import com.lesson.community.entity.LoginTicketEntity;
-import com.lesson.community.entity.UserEntity;
+import com.lesson.community.entity.MessageEntity;
 import com.lesson.community.service.DiscussPostService;
+import com.lesson.community.service.MessageService;
 import com.lesson.community.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -22,15 +19,18 @@ public class MyTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MessageService messageService;
+
     @Test
     public void test() {
 
-        UserEntity userEntity1 = new UserEntity("user1", "pw", "sa",
-                "com", 1, 2, "hu", "g",
-                new Timestamp(new java.util.Date().getTime()));
-        UserEntity userEntity2 = new UserEntity("user2", "pw", "sa",
-                "com_pro", 1, 2, "hu", "g",
-                new Timestamp(new java.util.Date().getTime()));
+//        UserEntity userEntity1 = new UserEntity("user1", "pw", "sa",
+//                "com", 1, 2, "hu", "g",
+//                new Timestamp(new java.util.Date().getTime()));
+//        UserEntity userEntity2 = new UserEntity("user2", "pw", "sa",
+//                "com_pro", 1, 2, "hu", "g",
+//                new Timestamp(new java.util.Date().getTime()));
 
 //        try {
 //            userService.saveAndFlush(userEntity1);
@@ -73,5 +73,23 @@ public class MyTest {
 //                new Timestamp(new Date().getTime()));
 //        loginTicketRepository.saveAndFlush(loginTicket);
         loginTicketRepository.UpdateStatus("idfnisad", 0);
+    }
+
+    @Test
+    public void MessageTest(){
+        System.out.println(messageService.getConversationCount(111));
+
+        List<MessageEntity> lms = messageService.getConversations(111, 0, 20);
+        for(MessageEntity messageEntity : lms)
+            System.out.println(messageEntity);
+
+        System.out.println("---------------------");
+        List<MessageEntity> ll = messageService.getLetters("111_112", 0, 15);
+        for(MessageEntity message : ll)
+            System.out.println(message);
+
+        System.out.println(messageService.getLettersCount("111_112"));
+
+        System.out.println(messageService.getLetterUnreadCount(111, "111_112"));
     }
 }

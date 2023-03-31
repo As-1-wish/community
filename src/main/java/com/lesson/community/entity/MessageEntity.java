@@ -18,7 +18,7 @@ public class MessageEntity {
     @Column(name = "to_id", columnDefinition = "varchar(45) DEFAULT NULL")
     private int toId;
 
-    @Column(name = "conversation_id", columnDefinition = "varchar(45) NOT NULL comment '0-有效;1-无效'")
+    @Column(name = "conversation_id", columnDefinition = "varchar(45) NOT NULL")
     private String conversationId;
 
     @Column(name = "content", columnDefinition = "text")
@@ -32,16 +32,6 @@ public class MessageEntity {
 
 
     public MessageEntity(){}
-
-    public MessageEntity(int fromId, int toId, String conversationId,String content,int status,
-                         Timestamp createTime){
-        this.fromId  = fromId;
-        this.toId = toId;
-        this.conversationId = conversationId;
-        this.content = content;
-        this.status= status;
-        this.createTime = createTime;
-    }
 
     @Override
     public String toString() {
