@@ -20,4 +20,10 @@ public interface MessageService {
 
     //查询未读私信数量
     int getLetterUnreadCount(int userid, String conversationId);
+
+    // 新增私信
+    void insertLetter(MessageEntity message);
+
+    // 修改私信状态
+    void updateStatus(List<Integer> ids, int stauts);
 }

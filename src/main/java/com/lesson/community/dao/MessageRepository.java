@@ -44,4 +44,7 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Integer>
             nativeQuery = true)
     int getLetterUnreadCount(@Param("userid") int userid,
                              @Param("converstaionId") String conversationId);
+
+    @Query(value = "update MessageEntity set status = :status where id = :id")
+    void updateStatus(@Param("id") int id, @Param("status") int status);
 }

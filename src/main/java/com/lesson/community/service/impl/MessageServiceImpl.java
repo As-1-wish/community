@@ -3,8 +3,10 @@ package com.lesson.community.service.impl;
 import com.lesson.community.dao.MessageRepository;
 import com.lesson.community.entity.MessageEntity;
 import com.lesson.community.service.MessageService;
+import com.lesson.community.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private SensitiveFilter sensitiveFilter;
 
     @Override
     public List<MessageEntity> getConversations(int userid, int offset, int limit) {
@@ -43,5 +48,20 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public int getLetterUnreadCount(int userid, String conversationId) {
         return messageRepository.getLetterUnreadCount(userid, conversationId);
+    }
+
+    @Override
+    public void insertLetter(MessageEntity message) {
+
+        message.setContent(HtmlUtils.htmlEscape(message.getContent()));
+        message.setContent(sensitiveFilter.filter(message.getContent()));
+
+        messageRepository.saveAndFlush(message);
+    }
+
+    @Override
+    public void updateStatus(List<Integer> ids, int stauts) {
+        for (int id : ids)
+            messageRepository.updateStatus(id, stauts);
     }
 }
