@@ -7,7 +7,6 @@ import com.lesson.community.service.MessageService;
 import com.lesson.community.service.UserService;
 import com.lesson.community.util.CommunityUtil;
 import com.lesson.community.util.HostHolderUntil;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -152,7 +151,7 @@ public class MessageController {
      * @Description 给某人发私信
      * @date 2023/4/6 9:06
      */
-    @RequestMapping(path = "/letter/send", method = RequestMethod.POST)
+    @RequestMapping(path = "/send", method = RequestMethod.POST)
     @ResponseBody
     public String sendLetter(String toName, String content) {
         UserEntity preUser = holderUntil.getUser();

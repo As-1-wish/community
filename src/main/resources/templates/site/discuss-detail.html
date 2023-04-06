@@ -221,12 +221,12 @@
 				<form class="replyform" method="post" th:action="@{|/comment/add/${post.id}|}">
 					<p class="mt-3">
 						<a id="replyform"></a>
-						<textarea placeholder="在这里畅所欲言你的看法吧!" name="content"></textarea>
+						<textarea placeholder="在这里畅所欲言你的看法吧!" name="content" id="contentArea"></textarea>
 						<input type="hidden" name="entityType" value="1">
 						<input type="hidden" name="entityId" th:value="${post.id}">
 					</p>
 					<p class="text-right">
-						<button type="submit" class="btn btn-primary btn-sm">&nbsp;&nbsp;回&nbsp;&nbsp;帖&nbsp;&nbsp;</button>
+						<button class="btn btn-primary btn-sm" type="submit">&nbsp;&nbsp;回&nbsp;&nbsp;帖&nbsp;&nbsp;</button>
 					</p>
 				</form>
 			</div>
@@ -300,7 +300,7 @@
 	<script th:src="@{/js/global.js}"></script>
 	<script>
 		function comment_show(){
-			let commentInput = document.querySelector("#commentArea")
+			let commentInput = document.querySelector("#replyArea")
 			commentInput.style.display = ""
 		}
 	</script>

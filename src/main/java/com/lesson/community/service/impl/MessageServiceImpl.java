@@ -54,10 +54,8 @@ public class MessageServiceImpl implements MessageService {
     public int getLetterUnreadCount(int userid, String conversationId) {
         String sql = "select count(*) from message where status = 0 and from_id != 0 and to_id = "
                 + userid + (conversationId != null?" and conversation_id = '" + conversationId+"'":"");
-        System.out.println(sql);
         Query query = entityManager.createNativeQuery(sql);
         Object result = query.getSingleResult();
-        System.out.println(result.toString());
         return Integer.parseInt(result.toString());
     }
 
