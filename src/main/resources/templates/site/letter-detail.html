@@ -87,7 +87,7 @@
 								<form>
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">发给：</label>
-										<input type="text" class="form-control" id="recipient-name" value="落基山脉下的闲人">
+										<input type="text" class="form-control" id="recipient-name" th:value="${target.username}">
 									</div>
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">内容：</label>
@@ -118,11 +118,12 @@
 				
 				<!-- 私信列表 -->
 				<ul class="list-unstyled mt-4">
-					<li class="media pb-3 pt-3 mb-2" th:each="map:${letters}">
+					<li class="media pb-3 pt-3 mb-2" style="position: relative" th:each="map:${letters}">
 						<a href="profile.html">
 							<img th:src="${map.fromUser.headerUrl}" class="mr-4 rounded-circle user-header" alt="用户头像"  src="">
 						</a>
-						<div class="toast show d-lg-block" role="alert" aria-live="assertive" aria-atomic="true">
+						<div class="toast show d-lg-block" style="position: absolute;width: 80%;margin-left: 8%"
+							 role="alert" aria-live="assertive" aria-atomic="true">
 							<div class="toast-header">
 								<strong class="mr-auto" th:utext="${map.fromUser.username}"></strong>
 								<small th:text="${#dates.format(map.letter.createTime, 'yyyy-MM-dd HH:mm:ss')}"></small>
@@ -130,9 +131,7 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<div class="toast-body" th:utext="map.letter.content">
-								君不见, 黄河之水天上来, 奔流到海不复回!
-							</div>
+							<div class="toast-body" th:utext="${map.letter.content}"></div>
 						</div>
 					</li>
 				</ul>

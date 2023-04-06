@@ -5,6 +5,7 @@ import com.lesson.community.entity.MessageEntity;
 import com.lesson.community.service.DiscussPostService;
 import com.lesson.community.service.MessageService;
 import com.lesson.community.service.UserService;
+import com.lesson.community.util.CommunityUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,23 +76,28 @@ public class MyTest {
         loginTicketRepository.UpdateStatus("idfnisad", 0);
     }
 
+//    @Test
+//    public void MessageTest(){
+//        System.out.println(messageService.getConversationCount(111));
+//
+//        List<MessageEntity> lms = messageService.getConversations(111, 0, 20);
+//        for(MessageEntity messageEntity : lms)
+//            System.out.println(messageEntity);
+//
+//        System.out.println("---------------------");
+//        List<MessageEntity> ll = messageService.getLetters("111_112", 0, 15);
+//        for(MessageEntity message : ll)
+//            System.out.println(message);
+//
+//        System.out.println(messageService.getLettersCount("111_112"));
+//
+//        System.out.println(messageService.getLetterUnreadCount(111, "111_112"));
+//
+//        System.out.println(messageService.getLetterUnreadCount(111, null));
+//    }
+
     @Test
-    public void MessageTest(){
-        System.out.println(messageService.getConversationCount(111));
-
-        List<MessageEntity> lms = messageService.getConversations(111, 0, 20);
-        for(MessageEntity messageEntity : lms)
-            System.out.println(messageEntity);
-
-        System.out.println("---------------------");
-        List<MessageEntity> ll = messageService.getLetters("111_112", 0, 15);
-        for(MessageEntity message : ll)
-            System.out.println(message);
-
-        System.out.println(messageService.getLettersCount("111_112"));
-
-        System.out.println(messageService.getLetterUnreadCount(111, "111_112"));
-
-        System.out.println(messageService.getLetterUnreadCount(111, null));
+    public void kkk(){
+        System.out.println(CommunityUtil.Encrypt("systemaaaaaa"));
     }
 }

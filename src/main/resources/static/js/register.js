@@ -4,10 +4,10 @@ $(function(){
 });
 
 function check_data() {
-	var pwd1 = $("#password").val();
-	var pwd2 = $("#confirm-password").val();
-	if(pwd1 != pwd2) {
-		$("#confirm-password").addClass("is-invalid");
+	let pwd1 = $("#password").val();
+	let pwd2 = $("#confirm-password");
+	if(pwd1 !== pwd2.val()) {
+		pwd2.addClass("is-invalid");
 		return false;
 	}
 	return true;

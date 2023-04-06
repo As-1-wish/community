@@ -13,7 +13,7 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Integer>
 
     //查询当前用户的会话列表，针对每个会话只返回一条最新的私信
     @Query(value = "select * from message where id in (select max(id) " +
-            "from message where status != 2 and from_id != 1 and (" +
+            "from message where status != 2 and from_id != 0 and (" +
             "from_id = :userid or to_id = :userid) group by conversation_id) order by id " +
             "desc limit :offset, :limit", nativeQuery = true)
     List<MessageEntity> getConversations(@Param("userid") int userid,
@@ -22,12 +22,12 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Integer>
 
     //查询当前用户的会话数量
     @Query(value = "select count(*) from (select  max(id) from message where " +
-            "status != 2 and from_id != 1 and (from_id = :userid or to_id = :userid) " +
+            "status != 2 and from_id != 0 and (from_id = :userid or to_id = :userid) " +
             "group by conversation_id) as cs", nativeQuery = true)
     int getConversationCount(@Param("userid") int userid);
 
     // 查询每个会话所包含的私信列表
-    @Query(value = "select * from message where status != 2 and from_id != 1 " +
+    @Query(value = "select * from message where status != 2 and from_id != 0 " +
             "and conversation_id = :cvId limit :offset, :limit", nativeQuery = true)
     List<MessageEntity> getLetters(@Param("cvId") String couversationId,
                                    @Param("offset") int offset,

@@ -186,8 +186,8 @@ public class UserServiceImpl implements UserService, ConstantUtil {
     }
 
     @Override
-    public int UpdateHeader(Integer id, String headerUrl) {
-        return userRepository.UpdateHeader(id, headerUrl);
+    public void UpdateHeader(Integer id, String headerUrl) {
+        userRepository.UpdateHeader(id, headerUrl);
     }
 
     @Override

@@ -16,7 +16,7 @@ public interface UserService {
 
     int UpdateStatus(Integer id, Integer status);
 
-    int UpdateHeader(Integer id, String headerUrl);
+    void UpdateHeader(Integer id, String headerUrl);
 
     int Updatepassword(Integer id, String password);
 

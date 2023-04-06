@@ -30,7 +30,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     @Modifying
     @Transactional
     @Query(value = "UPDATE UserEntity SET headerUrl = :headerUrl WHERE id = :id")
-    int UpdateHeader(@Param("id") Integer id, @Param("headerUrl") String headerUrl);
+    void UpdateHeader(@Param("id") Integer id, @Param("headerUrl") String headerUrl);
 
     @Modifying
     @Transactional
