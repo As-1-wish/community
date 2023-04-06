@@ -26,6 +26,7 @@ import java.util.*;
  * @Created by hwj
  */
 @Controller
+@RequestMapping("/letter")
 public class MessageController {
 
     @Autowired
@@ -43,7 +44,7 @@ public class MessageController {
      * @date 2023/3/31 15:48
      */
     // 会话列表
-    @RequestMapping(path = "/letter/list", method = RequestMethod.GET)
+    @RequestMapping(path = "/list", method = RequestMethod.GET)
     public String getLetterList(Model model, PageObject page) {
         UserEntity preUser = holderUntil.getUser();
         // 分页列表
@@ -86,7 +87,7 @@ public class MessageController {
      * @Description 会话详情
      * @date 2023/4/6 9:37
      */
-    @RequestMapping(path = "/letter/detail/{conversationId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/detail/{conversationId}", method = RequestMethod.GET)
     public String getLetterDetail(@PathVariable("conversationId") String conversationId,
                                   PageObject page, Model model) {
         // 分页设置

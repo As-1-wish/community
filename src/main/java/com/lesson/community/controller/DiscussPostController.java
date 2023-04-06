@@ -123,4 +123,5 @@ public class DiscussPostController implements ConstantUtil {
 
         return "/site/discuss-detail";
     }
+
 }
