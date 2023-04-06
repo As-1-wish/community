@@ -2,10 +2,12 @@ package com.lesson.community.dao;
 
 import com.lesson.community.entity.MessageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -28,23 +30,18 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Integer>
 
     // 查询每个会话所包含的私信列表
     @Query(value = "select * from message where status != 2 and from_id != 0 " +
-            "and conversation_id = :cvId limit :offset, :limit", nativeQuery = true)
+            "and conversation_id = :cvId order by create_time desc limit :offset, :limit", nativeQuery = true)
     List<MessageEntity> getLetters(@Param("cvId") String couversationId,
                                    @Param("offset") int offset,
                                    @Param("limit") int limit);
 
     // 查询每个会话所包含的私信数量
-    @Query(value = "select count(*) from MessageEntity where status != 2 and fromId != 1 " +
+    @Query(value = "select count(*) from MessageEntity where status != 2 and fromId != 0 " +
             "and conversationId = :converstaionId")
     int getLettersCount(@Param("converstaionId") String conversationId);
 
-    //查询未读私信数量
-    @Query(value = "select count(*) from message where status = 0 and from_id != 1" +
-            " and to_id = :userid and if(:converstaionId != null, conversation_id = :converstaionId, 1=1)",
-            nativeQuery = true)
-    int getLetterUnreadCount(@Param("userid") int userid,
-                             @Param("converstaionId") String conversationId);
-
     @Query(value = "update MessageEntity set status = :status where id = :id")
+    @Modifying
+    @Transactional
     void updateStatus(@Param("id") int id, @Param("status") int status);
 }

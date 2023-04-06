@@ -64,6 +64,7 @@ public class MessageController {
                 // 此会话未读信息数量
                 tmp.put("unreadCount", messageService.getLetterUnreadCount(preUser.getId(),
                         message.getConversationId()));
+
                 int targetId = preUser.getId() == message.getFromId() ? message.getToId() : message.getFromId();
                 // 信息发送对象
                 tmp.put("target", userService.getUserEntityByID(targetId));
@@ -111,7 +112,25 @@ public class MessageController {
         // 私信目标
         model.addAttribute("target", getLetterTarget(conversationId));
 
+        List<Integer> ids = getUnreadLetters(letterList);
+        if (!ids.isEmpty())
+            messageService.updateStatus(ids, 1);
+
         return "/site/letter-detail";
+    }
+
+    /**
+     * @author hwj
+     * @Description 获取未读信息id列表
+     * @date 2023/4/6 10:41
+     */
+    private List<Integer> getUnreadLetters(List<MessageEntity> letters) {
+        List<Integer> ids = new ArrayList<>();
+        if (letters != null)
+            for (MessageEntity message : letters)
+                if (message.getToId() == holderUntil.getUser().getId() && message.getStatus() == 0)
+                    ids.add(message.getId());
+        return ids;
     }
 
     /**

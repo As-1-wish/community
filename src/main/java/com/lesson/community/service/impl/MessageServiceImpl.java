@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -24,6 +26,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private SensitiveFilter sensitiveFilter;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public List<MessageEntity> getConversations(int userid, int offset, int limit) {
@@ -47,7 +52,13 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public int getLetterUnreadCount(int userid, String conversationId) {
-        return messageRepository.getLetterUnreadCount(userid, conversationId);
+        String sql = "select count(*) from message where status = 0 and from_id != 0 and to_id = "
+                + userid + (conversationId != null?" and conversation_id = '" + conversationId+"'":"");
+        System.out.println(sql);
+        Query query = entityManager.createNativeQuery(sql);
+        Object result = query.getSingleResult();
+        System.out.println(result.toString());
+        return Integer.parseInt(result.toString());
     }
 
     @Override
