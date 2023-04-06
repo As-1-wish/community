@@ -319,6 +319,81 @@ RUNTIME		注解将被编译器记录在class文件中，而且在运行时会被
 
 **@Inherited**				指定某个自定义注解如果写在了父类的声明部分，那么子类的声明部分也能自动拥有该注解
 
+### 2.6  HTTP 服务器交互
+
+[HTTP中Get、Post、Put与Delete的区别](https://blog.csdn.net/haif_city/article/details/78333213)
+
+### 2.7  统一异常处理
+
+```java
+@ControllerAdvice(annotations = Controller.class)	//  表明是全局配置类，annotations设置监听注解
+public class ExceptionAdvice {
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionAdvice.class);
+
+    @ExceptionHandler({Exception.class})	// controller出现异常后被调用，用于处理捕获到的异常
+    public void handleException(Exception e, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        logger.error("服务器发生异常:"  + e.getMessage());
+        for (StackTraceElement element : e.getStackTrace()){    // 循环输出详细信息
+            logger.error(element.toString());
+        }
+
+        // 判断异步请求 or 普通请求
+        String xRequestdWith = request.getHeader("x-requested-with");
+        if(xRequestdWith.equals("XMLHttpRequest")){ // 异步请求
+            // /plain 普通类型 但是是json格式
+            response.setContentType("application/plain;charset=utf-8");
+        }
+        else{
+            response.sendRedirect(request.getContextPath() + "/error");
+        }
+    }
+}
+
+```
+
+
+
+### 2.8  Tips
+
+1、关于在其他页面返回首页路径失败:
+
+例如：首页路径设为$/community/index$,然后访问其他页面$/community/discuss/detail/1$，在此页面下返回首页，此时首页的路径变为$/community/discuss/index$
+
+原因：MVC中，一个$Controller$对应一个路径，将$Controller$类的路径整合到每个方法上,如下。那么当在$MessageController$所代表的路径下进行返回首页时，由方法返回至$Controller$，发现没有$RequestMapping$，那以为默认路径为“/”，而返回首页的$HomeController$也没有$RequestMapping$，则程序以为这两个类是同级，就会出现错误，只要将每个$Controller$指明各自路径即可。
+
+```java
+// 样例
+@Controller
+@RequestMapping("/letter")    //修改后
+public class MessageController {
+
+    @RequestMapping(path = "/letter/list", method = RequestMethod.GET)//修改前
+    @RequestMapping(path = "/list", method = RequestMethod.GET)//修改后
+    public String getLetterList(Model model, PageObject page) {}
+
+    @RequestMapping(path = "/letter/detail/{conversationId}", method = RequestMethod.GET)//修改前
+    @RequestMapping(path = "/detail/{conversationId}", method = RequestMethod.GET)//修改后
+    public String getLetterDetail(@PathVariable("conversationId") String conversationId) {}
+     
+    @RequestMapping(path = "/letter/send", method = RequestMethod.POST)//修改前
+    @RequestMapping(path = "/send", method = RequestMethod.POST)//修改后
+    @ResponseBody
+    public String sendLetter(String toName, String content) {}
+}
+```
+
+```java
+// 返回首页
+@Controller
+public class HomeController {
+
+    @RequestMapping(path = "/index", method = RequestMethod.GET)
+    public String getIndexPage(Model model, PageObject page) {
+    	return "/index";
+}
+
+```
+
 # 3  Spring Data JPA
 
 ### 3.1  配置 Spring Data JPA
@@ -916,3 +991,135 @@ public class MyTest {
 ```
 
   
+
+# 6.  Kafka
+
+
+
+
+
+# 7.  事务管理
+
+### 7.1  概念
+
+事务是由N步数据库操作序列组成的逻辑执行单元，这系列操作要么全执行，要么全放弃执行。
+
+### 7.2  特性(ACID)
+
+- 原子性：事务是应用中不可再分的最小执行体
+- 一致性：事务执行的结果，须使数据从一个一致性状态，变为另一个一致性状态
+- 隔离性：各个事务的执行互不干扰，任何事务的内部操作对其他事务都是隔离的
+- 持久性：事务一旦提交，对数据所做的任何改变都要记录到永久存储器中
+
+### 7.3  事务的隔离性
+
+**常见并发异常**
+
+- 第一类丢失更新：某一个事务的**导致**另一个事务已更新的数据丢失了
+- 第二类丢失更新：某一个事务的**提交**导致另一个事务已更新的数据丢失了
+- 脏读：某一个事务读取了另一个事务未提交的数据
+- 不可重复读：某一个事务对同一个数据前后读取的结果不一致
+- 幻读：某一个事务对同一个表前后查询到的行数不一致
+
+**常见隔离级别**
+
+- Read Uncommitted：读取未提交的数据
+- Read Committed：读取已提交的数据
+- Repeatable Read：可重复读
+- Serializable：串行化
+
+|     隔离级别     |      第一类丢失更新      |           脏读           |      第二类丢失更新      |        不可重复读        |           幻读           |
+| :--------------: | :----------------------: | :----------------------: | :----------------------: | :----------------------: | :----------------------: |
+| Read Uncommitted | <font color=Red>Y</font> | <font color=Red>Y</font> | <font color=Red>Y</font> | <font color=Red>Y</font> | <font color=Red>Y</font> |
+|  Read Committed  |            N             |            N             | <font color=Red>Y</font> | <font color=Red>Y</font> | <font color=Red>Y</font> |
+| Repeatable Read  |            N             |            N             |            N             |            N             | <font color=Red>Y</font> |
+|   Serializable   |            N             |            N             |            N             |            N             |            N             |
+
+### 7.4  实现机制
+
+- 悲观锁（数据库）
+
+​		--共享锁（S锁）：事务对某数据加了共享锁，其他事务只能对该数据加共享锁，但不能加排他锁
+
+​		--排他锁（X锁）：事务对某数据加了排他锁，其他事务对该数据既不能加共享锁，也不能加排他锁
+
+- 乐观锁（自定义）
+
+​		--版本、时间戳等，在更新数据前查看版本号是否发生变化，变化则取消本次更新，反之则更新
+
+# 8.  AOP
+
+### 8.1  介绍
+
+在软件业，AOP为Aspect Oriented Programming的缩写，意为：**面向切面编程**，通过预编译方式和运行期间动态代理实现程序功能的统一维护的一种技术（编程思想）。AOP是[OOP](https://baike.baidu.com/item/OOP/1152915)的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。
+
+![](E:\VSCode\aop.png)
+
+### 8.2  实现
+
+- AspectJ
+
+  ​	-- 语言级的实现，扩展了Java语言，定义了AOP语法
+
+  ​	-- 在编译期织入代码，有一个专门的编译器，用来生成遵守Java字节码规范的class文件
+
+- Spring AOP
+
+  ​	-- 使用纯Java实现，不需要专门的编译过程，也不需要特殊的类装载器
+
+  ​	-- 在运行时通过代理的方式织入代码，只支持方法类型的连接点
+
+  ​	-- 支持对AspectJ的集成
+
+### 8.3  Spring AOP
+
+- JDK动态代理
+
+  ​	-- Java提供的动态代理技术，可以在运行时创建接口的代理实例
+
+  ​	-- Spring AOP默认使用此方式，在接口的代理实例中织入代码
+
+- CGLib动态代理
+
+  ​	-- 采用底层的字节码技术，在运行时创建子类代理实例
+
+  ​	-- 当目标对象不存在接口时，Spring AOP会采用此种方式，在子类实例中织入代码
+
+### 8.4  使用
+
+```java
+package com.lesson.community.aspect;
+
+@Component
+@Aspect
+public class ServiceLogAspect {
+
+    private static final Logger logger = LoggerFactory.getLogger(ServiceLogAspect.class);
+
+    // @Pointcut("execution(方法返回类型 项目位置.包名.符合条件类名.符合条件方法名(符合条件参数))")
+    @Pointcut("execution(* com.lesson.community.service.*.*(..))")
+    public void pointcut(){}	// 初始化切面
+
+    // 方法执行前调用(参数是目标对象)
+    @Before("pointcut()")
+    public void before(JoinPoint joinPoint){}
+    
+    @After("pointcut()")
+    public void after() {}          // 调用后执行
+
+    @AfterReturning("pointcut()")
+    public void afterReturning() {}     // 返回时执行
+
+    @AfterThrowing("pointcut()")
+    public void afterThrowing() {}      // 抛出异常时执行
+
+    @Around("pointcut()")               // 调用前后运行
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        // 调用前执行代码块
+        Object obj = joinPoint.proceed();       // 调用目标对象
+        // 调用后执行代码块
+        return obj;
+    }
+}
+```
+
