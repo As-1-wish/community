@@ -2,6 +2,7 @@ package com.lesson.community.controller;
 
 import com.lesson.community.annotation.LoginRequired;
 import com.lesson.community.entity.UserEntity;
+import com.lesson.community.service.LikeService;
 import com.lesson.community.service.UserService;
 import com.lesson.community.util.CommunityUtil;
 import com.lesson.community.util.HostHolderUntil;
@@ -46,6 +47,9 @@ public class UserController {
 
     @Autowired
     private HostHolderUntil holderUntil;
+
+    @Autowired
+    private LikeService likeService;
 
     @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
@@ -123,6 +127,11 @@ public class UserController {
         }
     }
 
+    /**
+     * @author hwj
+     * @Description 修改密码
+     * @date 2023/4/7 13:51
+     */
     @LoginRequired
     @RequestMapping(path = "/pwd", method = RequestMethod.POST)
     public String ModifyPassword(String old_password, String new_password, String confirm_password, Model model){
@@ -143,5 +152,18 @@ public class UserController {
         }
         userService.ModifyPassword(user.getId(), new_password);
         return "redirect:/index";
+    }
+
+    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfile(@PathVariable("userId") int userId, Model model){
+        // 用户信息
+        UserEntity user = userService.getUserEntityByID(userId);
+        model.addAttribute("user", user);
+        // 用户获赞
+        long likeCount = likeService.getUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+
+
+        return "/site/profile";
     }
 }

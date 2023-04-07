@@ -18,7 +18,7 @@ public class RedisKeyUtil {
     }
 
     // 用户获赞  like:user:userid --> int
-    public static String getUserLikeKey(int userId){
+    public static String getUserLikeKey(int userId) {
         return PREFIX_USER_LIKE + SPLIT + userId;
     }
 }

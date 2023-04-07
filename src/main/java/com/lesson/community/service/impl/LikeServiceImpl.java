@@ -30,11 +30,10 @@ public class LikeServiceImpl implements LikeService {
 
                 Boolean liked = operations.opsForSet().isMember(entityKey, userId);
                 operations.multi(); // 开启事务
-                if(Boolean.TRUE.equals(liked)){
+                if (Boolean.TRUE.equals(liked)) {
                     operations.opsForSet().remove(entityKey, userId);
                     operations.opsForValue().decrement(userKey);
-                }
-                else{
+                } else {
                     operations.opsForSet().add(entityKey, userId);
                     operations.opsForValue().increment(userKey);
                 }
@@ -57,6 +56,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public int getUserLikeCount(int userId) {
         String userKey = RedisKeyUtil.getUserLikeKey(userId);
+        System.out.println("--------"+redisTemplate.opsForValue().get(userKey));
         Integer count = (Integer) redisTemplate.opsForValue().get(userKey);
         return count == null ? 0 : count;
     }

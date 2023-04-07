@@ -27,6 +27,6 @@ public interface DiscussPostRepository extends JpaRepository<DiscussPostEntity, 
     DiscussPostEntity getDiscussPostById(@Param("id")int id);
 
     @Modifying
-    @Query(value = "update DiscussPostEntity set commentCount = :count where id = :id ")
-    int updateCommentCount(@Param("id") int id, @Param("count") int count);
+    @Query(value = "update DiscussPostEntity set commentCount = :count + 1 where id = :id ")
+    void updateCommentCount(@Param("id") int id, @Param("count") int count);
 }

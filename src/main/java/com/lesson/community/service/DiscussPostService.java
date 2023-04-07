@@ -30,5 +30,5 @@ public interface DiscussPostService {
 
     DiscussPostEntity getDiscussPostByID(int id);
 
-    int updateCommentCount(int id, int count);
+    void updateCommentCount(int id, int count);
 }

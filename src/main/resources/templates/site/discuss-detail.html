@@ -75,7 +75,7 @@
 				</h6>
 				<!-- 作者 -->
 				<div class="media pb-3 border-bottom">
-					<a href="profile.html">
+					<a th:href="@{'/user/profile/' + ${user.id}}">
 						<img th:src="${user.headerUrl}" class="align-self-start mr-4 rounded-circle user-header"
 							 alt="用户头像"  src="">
 					</a>
@@ -87,7 +87,7 @@
 								<li class="d-inline ml-2">
 									<a href="javascript:" th:onclick="|like(this, 1, ${post.id}, ${post.userId})|"
 									   class="text-primary">
-										<b th:text="${postLikeStatus==1?'已赞':'赞'}"></b> <i th:text="${postLikeCount}">11</i>
+										<b th:text="${postLikeStatus==1?'已赞':'赞'}"></b> <i th:text="${postLikeCount}"></i>
 									</a></li>
 								<li class="d-inline ml-2">|</li>
 								<li class="d-inline ml-2"><a href="#replyform" class="text-primary">回帖
@@ -113,7 +113,7 @@
 				<!-- 回帖列表 -->
 				<ul class="list-unstyled mt-4">
 					<li class="media pb-3 pt-3 mb-3 border-bottom" th:each="cms:${comments}">
-						<a href="profile.html">
+						<a th:href="@{'/user/profile/' + ${cms.user.id}}">
 							<img th:src="${cms.user.headerUrl}" class="align-self-start mr-4 rounded-circle user-header" alt="用户头像"  src="">
 						</a>
 						<div class="media-body">
@@ -138,20 +138,7 @@
 									<li class="d-inline ml-2">|</li>
 									<li class="d-inline ml-2">
 										<a th:href="@{'#plhuifu-'+${cmsStat.count}}" th:id="|th-${cmsStat.count}|"
-										   class="text-primary" data-toggle="collapse" onclick="show_color(this.id)">回复(
-										<script th:inline="javascript">
-											function show_color(st){
-												let ids = "#pllist-" + st.substring(3)
-												console.log(ids)
-												let pl = document.querySelector(ids)
-												console.log(pl)
-
-												if(!pl.classList.contains("bg-gray"))
-													pl.className += "bg-gray"
-												else
-													pl.classList.remove("bg-gray")
-											}
-										</script>
+										   class="text-primary" data-toggle="collapse">回复(
 										<span th:text="${cms.replyCount}"></span>)</a></li>
 								</ul>
 							</div>

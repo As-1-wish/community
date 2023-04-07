@@ -61,8 +61,8 @@ public class DiscussPostServiceImpl implements DiscussPostService {
     }
 
     @Override
-    public int updateCommentCount(int id, int count) {
-        return discussPostRepository.updateCommentCount(id, count);
+    public void updateCommentCount(int id, int count) {
+        discussPostRepository.updateCommentCount(id, count);
     }
 
 

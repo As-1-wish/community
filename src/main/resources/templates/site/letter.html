@@ -9,7 +9,7 @@
 	<link rel="stylesheet" th:href="@{/css/letter.css}"/>
 	<title>牛客网-私信列表</title>
 </head>
-<body>
+<body onclick="preload()">
 	<div class="nk-container">
 		<!-- 头部 -->
 		<header class="bg-dark sticky-top" th:replace="index::header">
@@ -231,10 +231,12 @@
 	<script th:src="@{/js/global.js}"></script>
 	<script th:src="@{/js/letter.js}"></script>
 	<script>
-		window.addEventListener('pageshow', function (event){
-			if(event.persisted)
-				window.location.reload();
-		})
+		if(window.name !== "noReload"){
+			window.name = "noReload";
+			location.reload();
+		} else {
+			window.name = "";
+		}
 	</script>
 </body>
 </html>

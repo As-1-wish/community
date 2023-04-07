@@ -33,10 +33,10 @@
                                     class="badge badge-danger">12</span></a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical" th:if="${loginUser==null}">
-                            <a class="nav-link" th:href="@{register}">注册</a>
+                            <a class="nav-link" th:href="@{/register}">注册</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical" th:if="${loginUser==null}">
-                            <a class="nav-link" th:href="@{login}">登录</a>
+                            <a class="nav-link" th:href="@{/login}">登录</a>
                         </li>
                         <li class="nav-item ml-3 btn-group-vertical dropdown" th:if="${loginUser!=null}">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -45,7 +45,7 @@
                                      style="width:30px;" alt="" src=""/>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item text-center" href="site/profile.html">个人主页</a>
+                                <a class="dropdown-item text-center" th:href="@{'/user/profile/' + ${loginUser.id}}">个人主页</a>
                                 <a class="dropdown-item text-center" th:href="@{/user/setting}">账号设置</a>
                                 <a class="dropdown-item text-center" th:href="@{/logout}">退出登录</a>
                                 <div class="dropdown-divider"></div>
@@ -130,7 +130,7 @@
             <!-- 帖子列表 -->
             <ul class="list-unstyled">
                 <li class="media pb-3 pt-3 mb-3 border-bottom" th:each="perDis:${discussPosts}">
-                    <a href="site/profile.html">
+                    <a th:href="@{'/user/profile/' + ${perDis.user.id}}">
                         <img th:src="${perDis.user.headerUrl}" class="mr-4 rounded-circle" alt="用户头像"
                              style="width:50px;height:50px;" src="">
                     </a>
@@ -145,7 +145,7 @@
                             发布于 <b th:text="${#dates.format(perDis.post.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-15
                             15:32:18</b>
                             <ul class="d-inline float-right">
-                                <li class="d-inline ml-2">赞 11</li>
+                                <li class="d-inline ml-2">赞 <span th:text="${perDis.likeCount}"></span></li>
                                 <li class="d-inline ml-2">|</li>
                                 <li class="d-inline ml-2">回帖 <span th:text="${perDis.post.commentCount}"></span></li>
                             </ul>
