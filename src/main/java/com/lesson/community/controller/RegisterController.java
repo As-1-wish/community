@@ -19,6 +19,7 @@ import java.util.Map;
  * @Created by hwj
  */
 @Controller
+@RequestMapping("/r")
 public class RegisterController implements ConstantUtil {
 
     @Autowired

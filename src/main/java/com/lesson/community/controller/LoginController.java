@@ -30,6 +30,7 @@ import java.util.Map;
  * @Created by hwj
  */
 @Controller
+@RequestMapping("/l")
 public class LoginController implements ConstantUtil {
 
     @Autowired

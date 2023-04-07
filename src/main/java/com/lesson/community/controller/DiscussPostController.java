@@ -6,6 +6,7 @@ import com.lesson.community.entity.PageObject;
 import com.lesson.community.entity.UserEntity;
 import com.lesson.community.service.CommentService;
 import com.lesson.community.service.DiscussPostService;
+import com.lesson.community.service.LikeService;
 import com.lesson.community.service.UserService;
 import com.lesson.community.util.CommunityUtil;
 import com.lesson.community.util.ConstantUtil;
@@ -43,6 +44,9 @@ public class DiscussPostController implements ConstantUtil {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private LikeService likeService;
+
     /**
      * @author hwj
      * @Description 帖子发布
@@ -74,12 +78,20 @@ public class DiscussPostController implements ConstantUtil {
     @RequestMapping(path = "/detail/{discussPostId}", method = RequestMethod.GET)
     public String postDetail(@PathVariable("discussPostId") int discussPostId, Model model, PageObject page) {
 
+        UserEntity preUser = holderUntil.getUser();
         // 获取帖子内容
         DiscussPostEntity post = discussPostService.getDiscussPostByID(discussPostId);
         model.addAttribute("post", post);
         // 作者
         UserEntity user = userService.getUserEntityByID(post.getUserId());
         model.addAttribute("user", user);
+        // 点赞数量
+        long postLikeCount = likeService.getLikeCount(ENTITY_TYPE_POST, post.getId());
+        // 点赞状态
+        int postLikeStatus = preUser == null ? 0 :
+                likeService.getLikeStatus(preUser.getId(), ENTITY_TYPE_POST, post.getId());
+        model.addAttribute("postLikeCount", postLikeCount);
+        model.addAttribute("postLikeStatus", postLikeStatus);
         // 评论分页信息
         page.setPagePath("/discuss/detail/" + discussPostId);
         page.setTotalRows(post.getCommentCount());
@@ -87,8 +99,7 @@ public class DiscussPostController implements ConstantUtil {
         model.addAttribute("page", page);
 
         // 评论列表
-        List<CommentEntity> commentList = commentService.getCommentsByType(ENTITY_TYPE_POST,
-                post.getId(), page.getOffset(), page.getLimit());
+        List<CommentEntity> commentList = commentService.getCommentsByType(ENTITY_TYPE_POST, post.getId(), page.getOffset(), page.getLimit());
         if (commentList != null) {
             // 返回页面的帖子列表
             List<Map<String, Object>> cls = new ArrayList<>();
@@ -96,9 +107,13 @@ public class DiscussPostController implements ConstantUtil {
                 Map<String, Object> tmp = new HashMap<>();
                 tmp.put("comment", com);    // 评论
                 tmp.put("user", userService.getUserEntityByID(com.getUserId()));  //评论作者
+                long commentLikeCount = likeService.getLikeCount(ENTITY_TYPE_COMMENT, com.getId());
+                tmp.put("commentLikeCount", commentLikeCount); //评论点赞数量
+                int commentLikeStatus = preUser == null ? 0 :
+                        likeService.getLikeStatus(preUser.getId(), ENTITY_TYPE_COMMENT, com.getId());
+                tmp.put("commentLikeStatus", commentLikeStatus); // 评论点赞状态
                 // 回复列表
-                List<CommentEntity> replyList = commentService.getCommentsByType
-                        (ENTITY_TYPE_COMMENT, com.getId(), 0, Integer.MAX_VALUE);
+                List<CommentEntity> replyList = commentService.getCommentsByType(ENTITY_TYPE_COMMENT, com.getId(), 0, Integer.MAX_VALUE);
                 // 返回页面的回复列表
                 List<Map<String, Object>> rls = new ArrayList<>();
                 if (replyList != null) {
@@ -106,9 +121,13 @@ public class DiscussPostController implements ConstantUtil {
                         Map<String, Object> tp = new HashMap<>();
                         tp.put("reply", rep); // 回复
                         tp.put("user", userService.getUserEntityByID(rep.getUserId()));  //回复作者
-                        UserEntity target = rep.getTargetId() == 0 ?
-                                null : userService.getUserEntityByID(rep.getTargetId());
+                        UserEntity target = rep.getTargetId() == 0 ? null : userService.getUserEntityByID(rep.getTargetId());
                         tp.put("target", target);  // 回复对象
+                        long replyLikeCount = likeService.getLikeCount(ENTITY_TYPE_COMMENT, rep.getId());
+                        tp.put("replyLikeCount", replyLikeCount); //回复点赞数量
+                        int replyLikeStatus = preUser == null ? 0 :
+                                likeService.getLikeStatus(preUser.getId(), ENTITY_TYPE_COMMENT, rep.getId());
+                        tp.put("replyLikeStatus", replyLikeStatus); // 回复点赞状态
                         rls.add(tp);
                     }
                 }

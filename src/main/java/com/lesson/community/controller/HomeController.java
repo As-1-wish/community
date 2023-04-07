@@ -4,7 +4,9 @@ import com.lesson.community.entity.DiscussPostEntity;
 import com.lesson.community.entity.PageObject;
 import com.lesson.community.entity.UserEntity;
 import com.lesson.community.service.DiscussPostService;
+import com.lesson.community.service.LikeService;
 import com.lesson.community.service.UserService;
+import com.lesson.community.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +25,16 @@ import java.util.Map;
  * @Created by hwj
  */
 @Controller
-public class HomeController {
+public class HomeController implements ConstantUtil {
 
     @Autowired
     private DiscussPostService discussPostService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
 
     /**
      * @param model 负责在 Controller 与 View 之间传递数据
@@ -55,6 +60,8 @@ public class HomeController {
                 map.put("post", dis); // 将帖子对象存入,对应 post
                 UserEntity user = userService.getUserEntityByID(dis.getUserId());
                 map.put("user", user); // 将帖子对应的用户对象存入,对应 user
+                long likeCount = likeService.getLikeCount(ENTITY_TYPE_POST, dis.getId());
+                map.put("likeCount", likeCount);    // 存入对应帖子点赞数量
                 discussPosts.add(map); // 将处理好的单个帖子-用户存入结果集
             }
         }

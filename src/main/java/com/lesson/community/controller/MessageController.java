@@ -42,7 +42,6 @@ public class MessageController {
      * @Description 显示私信列表
      * @date 2023/3/31 15:48
      */
-    // 会话列表
     @RequestMapping(path = "/list", method = RequestMethod.GET)
     public String getLetterList(Model model, PageObject page) {
         UserEntity preUser = holderUntil.getUser();
