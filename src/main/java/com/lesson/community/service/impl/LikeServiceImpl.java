@@ -56,7 +56,6 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public int getUserLikeCount(int userId) {
         String userKey = RedisKeyUtil.getUserLikeKey(userId);
-        System.out.println("--------"+redisTemplate.opsForValue().get(userKey));
         Integer count = (Integer) redisTemplate.opsForValue().get(userKey);
         return count == null ? 0 : count;
     }

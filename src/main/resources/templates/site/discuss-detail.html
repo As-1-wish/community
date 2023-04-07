@@ -302,6 +302,12 @@
 			let commentInput = document.querySelector("#replyArea")
 			commentInput.style.display = ""
 		}
+		if(window.name !== "noReload"){
+			window.name = "noReload";
+			location.reload();
+		} else {
+			window.name = "";
+		}
 	</script>
 </body>
 </html>

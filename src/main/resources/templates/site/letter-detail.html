@@ -223,6 +223,12 @@
 		function back(){
 			location.href = CONTEXT_PATH + "/letter/list"
 		}
+		if(window.name !== "noReload"){
+			window.name = "noReload";
+			location.reload();
+		} else {
+			window.name = "";
+		}
 	</script>
 </body>
 </html>
